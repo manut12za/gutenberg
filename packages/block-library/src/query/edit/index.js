@@ -6,7 +6,7 @@ import { useEffect } from '@wordpress/element';
 import {
 	BlockControls,
 	InnerBlocks,
-	useBlockWrapperProps,
+	useBlockProps,
 } from '@wordpress/block-editor';
 
 /**
@@ -22,7 +22,7 @@ export default function QueryEdit( {
 	setAttributes,
 } ) {
 	const instanceId = useInstanceId( QueryEdit );
-	const blockWrapperProps = useBlockWrapperProps();
+	const blockProps = useBlockProps();
 	// We need this for multi-query block pagination.
 	// Query parameters for each block are scoped to their ID.
 	useEffect( () => {
@@ -38,7 +38,7 @@ export default function QueryEdit( {
 			<BlockControls>
 				<QueryToolbar query={ query } setQuery={ updateQuery } />
 			</BlockControls>
-			<div { ...blockWrapperProps }>
+			<div { ...blockProps }>
 				<QueryProvider>
 					<InnerBlocks template={ TEMPLATE } />
 				</QueryProvider>
