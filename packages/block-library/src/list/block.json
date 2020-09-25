@@ -1,4 +1,5 @@
 {
+	"apiVersion": 1,
 	"name": "core/list",
 	"category": "text",
 	"attributes": {
@@ -30,7 +31,6 @@
 		"__experimentalColor": {
 			"gradients": true
 		},
-		"__unstablePasteTextInline": true,
-		"lightBlockWrapper": true
+		"__unstablePasteTextInline": true
 	}
 }
