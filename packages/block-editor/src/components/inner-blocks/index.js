@@ -49,8 +49,7 @@ function UncontrolledInnerBlocks( props ) {
 	} = props;
 
 	const isSmallScreen = useViewportMatch( 'medium', '<' );
-
-	const { hasOverlay, block, enableClickThrough } = useSelect(
+	const { hasOverlay, isNavMode, context } = useSelect(
 		( select ) => {
 			const {
 				getBlock,
@@ -58,18 +57,26 @@ function UncontrolledInnerBlocks( props ) {
 				hasSelectedInnerBlock,
 				isNavigationMode,
 			} = select( 'core/block-editor' );
-			const theBlock = getBlock( clientId );
+			const block = getBlock( clientId );
+			const blockType = getBlockType( block.name );
+			let blockContext;
+
+			if ( blockType && blockType.providesContext ) {
+				blockContext = getBlockContext( block.attributes, blockType );
+			}
+
 			return {
-				block: theBlock,
 				hasOverlay:
-					theBlock.name !== 'core/template' &&
+					block.name !== 'core/template' &&
 					! isBlockSelected( clientId ) &&
 					! hasSelectedInnerBlock( clientId, true ),
-				enableClickThrough: isNavigationMode() || isSmallScreen,
+				isNavMode: isNavigationMode(),
+				blockContext,
 			};
 		},
 		[ clientId ]
 	);
+	const enableClickThrough = isNavMode && isSmallScreen;
 
 	useNestedSettingsUpdate(
 		clientId,
@@ -101,10 +108,7 @@ function UncontrolledInnerBlocks( props ) {
 	);
 
 	// Wrap context provider if (and only if) block has context to provide.
-	const blockType = getBlockType( block.name );
-	if ( blockType && blockType.providesContext ) {
-		const context = getBlockContext( block.attributes, blockType );
-
+	if ( context ) {
 		blockList = (
 			<BlockContextProvider value={ context }>
 				{ blockList }
