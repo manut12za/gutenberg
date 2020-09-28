@@ -98,23 +98,16 @@ function UncontrolledInnerBlocks( props ) {
 		'is-capturing-toolbar': captureToolbars,
 	} );
 
-	let blockList = (
-		<BlockList
-			{ ...props }
-			ref={ forwardedRef }
-			rootClientId={ clientId }
-			className={ classes }
-		/>
+	const blockList = (
+		<BlockContextProvider value={ context }>
+			<BlockList
+				{ ...props }
+				ref={ forwardedRef }
+				rootClientId={ clientId }
+				className={ classes }
+			/>
+		</BlockContextProvider>
 	);
-
-	// Wrap context provider if (and only if) block has context to provide.
-	if ( context ) {
-		blockList = (
-			<BlockContextProvider value={ context }>
-				{ blockList }
-			</BlockContextProvider>
-		);
-	}
 
 	if ( props.__experimentalTagName ) {
 		return blockList;
